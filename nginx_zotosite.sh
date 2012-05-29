@@ -10,6 +10,24 @@ site_config="${NGINX_AVAILABLE}/${site}.conf"
 site_link="${NGINX_ENABLED}/${site}.conf"
 
 
+function check_directory {
+	dir="$1"
+
+	if [ -e "$dir" ]; then
+		if [ ! -d "$dir" ]; then
+			echo "[FAIL] (${dir} exists and is not a directory)"
+			exit 1
+		fi
+	else
+		mkdir -p "$dir" &>/dev/null
+
+		if [ $? = "1" ]; then
+			echo "[FAIL] (unable to create ${dir})"
+			exit 1
+		fi
+	fi
+}
+
 function create {
 	echo -n "Generating site config ... "
 
@@ -17,6 +35,8 @@ function create {
 		echo "[FAIL] (already exists)"
 		exit 1
 	fi
+
+	check_directory "$NGINX_AVAILABLE"
 
 	cat << EOF > "${site_config}" 2>/dev/null
 server {
@@ -69,6 +89,8 @@ EOF
 
 function enable {
 	echo -n "Enabling $site ... "
+
+	check_directory "$NGINX_ENABLED"
 
 	if [ -L "$site_link" ]; then
 		echo "[DONE]"
