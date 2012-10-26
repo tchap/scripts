@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 #
-# This script deletes all branches from a git repository
-# which are not in the Mercurial repository given as the parameter.
+# This script deletes those branches from a git repository
+# which are not open in the Mercurial repository given as the parameter.
 #
 # cd into the git repo and invoke <script> <path-to-the-hg-repo>
 
